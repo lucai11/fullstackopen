@@ -1,0 +1,20 @@
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+server-->browser: spa notes page HTML code
+browser -> server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server --> browser: returns main.css file
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+server-->browser: returns spa.js
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+browser -> server: HTTP Get https://studies.cs.helsinki.fi/exampleapp/data.json
+server --> browser: returns data.json
+
+
+
+note over browser:
+browser executes the event handler
+does this by calling redrawNotes
+end note
+

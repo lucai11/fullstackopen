@@ -1,0 +1,21 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note - delivers form data
+server-->browser: Status: 302, Location: /exampleapp/notes
+browser->server: (reloads the page) HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: notes page HTML code
+browser -> server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server --> browser: returns main.css file
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: returns main.js
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+browser -> server: HTTP Get https://studies.cs.helsinki.fi/exampleapp/data.json
+server --> browser: returns data.json
+
+
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note

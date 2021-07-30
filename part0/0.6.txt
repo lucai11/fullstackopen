@@ -1,0 +1,15 @@
+note over browser:
+when submit is pressed, default submit of a form is suppressed by JS. 
+instead, JS takes value of form, and creates a JS object with new date
+it pushes object to array, clears the form value, and calls
+redrawNotes and sendToServer
+end note
+note over browser: 
+redrawNotes creates UL, adds all notes as li children (including newly pushed one)
+if had other children, remove them to not duplicate list
+end note
+note over browser: 
+sendToServer parses newest note and makes post request
+end note
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: response: {"message":"note created"}
