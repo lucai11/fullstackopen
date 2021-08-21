@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const { response } = require('express')
 const express = require('express')
 const app = express()
@@ -20,6 +21,15 @@ app.use(morgan(':method :url :response-time :privatedata'))
 app.use(cors())
 app.use(express.static('build'))
 
+const errorHandler = (err, req, res, next) => {
+    if(err.name === 'ValidationError'){
+        res.status(400).send({
+            error: err.message
+        })
+    }
+    next(err)
+}
+
 app.get('/', (req, res) => {
     res.send('<h1>home</h1>')
 })
@@ -36,20 +46,6 @@ app.get('/api/persons', (req, res) => {
     })
 })
 
-//original that searches through array
-// app.get('/api/persons/:id', (req, res) => {
-//     const id = Number(req.params.id)
-//     let person = phonebook.find(person => person.id === id)
-//     console.log(person)
-//     if(person){
-//         res.send(
-//             `<h1>${person.name}</h1><br><h3>${person.number}</h3>`
-//         )
-//     }else{
-//         res.status(404).end()
-//     }
-    
-// })
 
 app.get('/api/persons/:id', (req, res) => {
     Person.findById(req.params.id).then(person => {
@@ -57,34 +53,9 @@ app.get('/api/persons/:id', (req, res) => {
     })
 })
 
-//old post with arrays
-// app.post('/api/persons', (request, response) => {
-//     const body = request.body
 
-//     if(!body.name || !body.number) {
-//         return response.status(400).json({
-//             error: 'name or number missing'
-//         })
-//     }
-//     if(phonebook.find(person => person.name === body.name)){
-//         return response.status(400).json({
-//             error: 'name not unique'
-//         })
-//     }
 
-//     const person = {
-//         name: body.name,
-//         number: body.number,
-//         date: new Date(),
-//         id: Math.round(Math.random()*10000)
-//     }
-
-//     phonebook = phonebook.concat(person)
-
-//     response.json(person)
-// })
-
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const body = req.body
     if(!body.name){
         return res.status(400).json({
@@ -99,15 +70,35 @@ app.post('/api/persons', (req, res) => {
 
     person.save().then(savedPerson => {
         res.json(savedPerson)
-    })
+    }).catch( err => next(err) )
 })
 
-app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    phonebook = phonebook.filter(person => person.id !== id)
-    res.status(204).end()
+app.put(`/api/persons/:id`, (req, res, next) => {
+    const body = req.body
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+    const opts = {
+        new: true,
+        runValidators: true,
+        context: 'query'
+    }
+    Person.findOneAndUpdate( { _id: req.params.id }, person, opts)
+        .then((updatedPerson) => {
+            res.json(updatedPerson)
+        }).catch(err => next(err))
 })
-   
+
+app.delete('/api/persons/:id', (req, res, next) => {
+    Person.findByIdAndDelete(req.params.id)
+        .then(() => {
+            res.status(204).end()
+        }).catch( err => next(err))
+})
+
+app.use(errorHandler)
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
