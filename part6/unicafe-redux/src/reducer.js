@@ -1,23 +1,32 @@
-const initialState = {
-  good: 0,
-  ok: 0,
-  bad: 0
-}
+import { createSlice } from '@reduxjs/toolkit'
 
-const counterReducer = (state = initialState, action) => {
-  console.log(action)
-  switch (action.type) {
-    case 'GOOD':
-      return state
-    case 'OK':
-      return state
-    case 'BAD':
-      return state
-    case 'ZERO':
-      return state
-    default: return state
+export const counterSlice = createSlice({
+  name: 'counter',
+  initialState: {
+      good: 0,
+      ok: 0,
+      bad: 0
+  },
+
+  reducers: {
+      increment_good: state => {
+          state.good += 1
+      },
+      increment_ok: state => {
+          state.ok += 1
+      },
+      increment_bad: state => {
+          state.bad += 1
+      },
+      reset_count: state => {
+        state.good = 0
+        state.ok = 0
+        state.bad = 0
+      }
+
   }
-  
-}
+})
 
-export default counterReducer
+export const { increment_good, increment_ok, increment_bad, reset_count } = counterSlice.actions
+
+export default counterSlice.reducer

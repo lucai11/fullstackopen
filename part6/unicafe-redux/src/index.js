@@ -1,33 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
-import reducer from './reducer'
-
-const store = createStore(reducer)
+import store from './store'
+import { useSelector, useDispatch } from 'react-redux';
+import {increment_good, increment_ok, increment_bad, reset_count} from './reducer'
+import { Provider } from 'react-redux'
 
 const App = () => {
-  const good = () => {
-    store.dispatch({
-      type: 'GOOD'
-    })
-  }
+  const counts = useSelector(state => state.counter)
+  const dispatch = useDispatch()
 
   return (
     <div>
-      <button onClick={good}>good</button> 
-      <button>ok</button> 
-      <button>bad</button>
-      <button>reset stats</button>
-      <div>good {store.getState().good}</div>
-      <div>ok</div>
-      <div>bad</div>
+      <button onClick={() => dispatch(increment_good())}>good</button> 
+      <button onClick= {() => dispatch(increment_ok())}>ok</button> 
+      <button onClick = {() => dispatch(increment_bad())}>bad</button>
+      <button onClick = { () => dispatch(reset_count())}>reset stats</button>
+      <div>good {counts.good}</div>
+      <div>ok {counts.ok}</div>
+      <div>bad {counts.bad}</div>
     </div>
   )
 }
 
-const renderApp = () => {
-  ReactDOM.render(<App />, document.getElementById('root'))
-}
 
-renderApp()
-store.subscribe(renderApp)
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store = { store }>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+
+
+
