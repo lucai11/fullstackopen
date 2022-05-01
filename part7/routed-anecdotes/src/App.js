@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import {
   BrowserRouter as Router, 
-  Routes, Route, Link, useParams
+  Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Menu = () => {
   const padding = {
@@ -67,7 +70,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -77,6 +80,8 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    navigate('/')
+    props.notify(author)
   }
 
   return (
@@ -103,6 +108,8 @@ const CreateNew = (props) => {
 }
 
 const App = () => {
+  const notify = (message) => toast(`Anecdote by ${message} saved`)
+
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -119,8 +126,6 @@ const App = () => {
       id: 2
     }
   ])
-
-  const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -150,8 +155,9 @@ const App = () => {
             <Route path='/:id' element={<Anecdote anecdotes={anecdotes} />} />
             <Route path='/' element={ <AnecdoteList anecdotes={anecdotes} /> } />
             <Route path='/about' element={<About />} />
-            <Route path='/createnew' element={<CreateNew addNew={addNew} /> } />
+            <Route path='/createnew' element={<CreateNew addNew={addNew} notify={notify} /> } />
           </Routes>
+          <ToastContainer />
           <Footer />
         </div>
     </Router>
