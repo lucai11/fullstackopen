@@ -1,4 +1,11 @@
 import { useState } from 'react'
+import {
+  BrowserRouter as Router, 
+  Routes, Route, Link, useParams, useNavigate
+} from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useField } from './hooks/index'
 
 const Menu = () => {
   const padding = {
@@ -6,9 +13,9 @@ const Menu = () => {
   }
   return (
     <div>
-      <a href='#' style={padding}>anecdotes</a>
-      <a href='#' style={padding}>create new</a>
-      <a href='#' style={padding}>about</a>
+      <Link style = {padding} to = '/'>anecdotes</Link>
+      <Link style={padding} to='/createnew'>create new</Link>
+      <Link style={padding} to='/about' >about</Link>
     </div>
   )
 }
@@ -17,10 +24,25 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => <li key={anecdote.id} >
+        <Link to={`/${anecdote.id}`}>{anecdote.content}</Link>
+      </li>)}
     </ul>
   </div>
 )
+
+const Anecdote = ({ anecdotes }) => {
+  const id = useParams().id
+  const anecdote = anecdotes.find(a => a.id === Number(id))
+  return (
+    <div>
+      <h2>{anecdote.content}</h2>
+      <div>{anecdote.author}</div>
+      <div>{anecdote.info}</div>
+      <div>{anecdote.votes}</div>
+    </div>
+  )
+}
 
 const About = () => (
   <div>
@@ -45,38 +67,50 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('text')
 
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
+    navigate('/')
+    props.notify(author.value)
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    content.onReset()
+    author.onReset()
+    info.onReset()
   }
 
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input name='content' {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input name = 'author' {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input name = 'info' {...info} />
         </div>
-        <button>create</button>
+        <button type='submit' onClick={handleSubmit}>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
@@ -84,6 +118,8 @@ const CreateNew = (props) => {
 }
 
 const App = () => {
+  const notify = (message) => toast(`Anecdote by ${message} saved`)
+
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -100,8 +136,6 @@ const App = () => {
       id: 2
     }
   ])
-
-  const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -123,14 +157,20 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h1>Software anecdotes</h1>
-      <Menu />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew addNew={addNew} />
-      <Footer />
-    </div>
+    <Router>
+        <div>
+          <h1>Software anecdotes</h1>
+          <Menu />
+          <Routes>
+            <Route path='/:id' element={<Anecdote anecdotes={anecdotes} />} />
+            <Route path='/' element={ <AnecdoteList anecdotes={anecdotes} /> } />
+            <Route path='/about' element={<About />} />
+            <Route path='/createnew' element={<CreateNew addNew={addNew} notify={notify} /> } />
+          </Routes>
+          <ToastContainer />
+          <Footer />
+        </div>
+    </Router>
   )
 }
 
