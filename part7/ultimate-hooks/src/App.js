@@ -1,5 +1,21 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import Table from 'react-bootstrap/Table'
+
+import styled from 'styled-components'
+
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
+
+const Input = styled.input`
+  margin: 0.25em;
+`
 
 const useField = (type) => {
   const [value, setValue] = useState('')
@@ -62,7 +78,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className='container'>
       <h2>notes</h2>
       <form onSubmit={handleNoteSubmit}>
         <input {...content} />
@@ -72,11 +88,21 @@ const App = () => {
 
       <h2>persons</h2>
       <form onSubmit={handlePersonSubmit}>
-        name <input {...name} /> <br/>
-        number <input {...number} />
-        <button>create</button>
+        name <Input {...name} /> <br/>
+        number <Input {...number} />
+        <Button type='submit'>create</Button>
       </form>
-      {persons.map(n => <p key={n.id}>{n.name} {n.number}</p>)}
+      <Table striped>
+        <tbody>
+          {persons.map(n => 
+            <tr key={n.id}>
+              <td>
+                {n.name} {n.number}
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }
