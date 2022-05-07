@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ initialBlog, resetBlog, user }) => {
+const Blog = ({ blog, resetBlog, user }) => {
 
     const [visible, setVisible] = useState(false)
-    const [blog, setBlog] = useState(initialBlog)
+    const [update, setUpdate] = useState(1)
     const username = user === null ? '' : user.username
+
     const addLike = async () => {
         let newBlog = blog
         newBlog.likes++
         await blogService.updateBlog(newBlog)
-        const updatedBlog = await blogService.getBlog(newBlog.id)
-        setBlog(updatedBlog)
+        setUpdate(update+1)
     }
 
     const deleteBlog = async (id) => {

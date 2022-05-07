@@ -50,6 +50,7 @@ const App = () => {
             )
 
             blogService.setToken(user.token)
+            console.log(user)
             setUser(user)
             setUsername('')
             setPassword('')
@@ -94,8 +95,8 @@ const App = () => {
             <div id='blogsContainer'>
                 {
                     blogs
-                        .map(blog => <Blog key = {blog.id} initialBlog = {blog} resetBlog = {setBlogs} user = {user} />)
-                        .sort((a, b) => b.props.initialBlog.likes - a.props.initialBlog.likes)
+                        .map(blog => <Blog key = {blog.id} blog = {blog} resetBlog = {setBlogs} user = {user} />)
+                        .sort((a, b) => b.props.blog.likes - a.props.blog.likes)
                 }
             </div>
         </div>
