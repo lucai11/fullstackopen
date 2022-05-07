@@ -1,50 +1,55 @@
 {
-    "blogs": [
+  "blogs": [
+    {
+      "_id": {
+        "$oid": "61ee70161857d751a452e8f4"
+      },
+      "title": "backend attack1",
+      "author": "Frank",
+      "url": "yo.yo.co",
+      "likes": 1,
+      "user": {
+        "$oid": "61ee70161857d751a452e8ed"
+      },
+      "__v": 0
+    },
+    {
+      "_id": {
+        "$oid": "61ee70161857d751a452e8fc"
+      },
+      "title": "backend attack2",
+      "author": "Frank",
+      "url": "yo.yo.co",
+      "likes": 2,
+      "user": {
+        "$oid": "61ee70161857d751a452e8ed"
+      },
+      "__v": 0
+    }
+  ],
+  "comments": [
+    {
+      "_id": {
+        "$oid": "61ee70161857d751a452e8ed"
+      },
+      "blogs": [
         {
-            "_id": {
-                "$oid": "61ee70161857d751a452e8f4"
-            },
-            "title": "backend attack1",
-            "author": "Frank",
-            "url": "yo.yo.co",
-            "likes": 1,
-            "user": {
-                "$oid": "61ee70161857d751a452e8ed"
-            },
-            "__v": 0
+          "$oid": "61ee70161857d751a452e8f4"
         },
         {
-            "_id": {
-                "$oid": "61ee70161857d751a452e8fc"
-            },
-            "title": "backend attack2",
-            "author": "Frank",
-            "url": "yo.yo.co",
-            "likes": 2,
-            "user": {
-                "$oid": "61ee70161857d751a452e8ed"
-            },
-            "__v": 0
-        }
-    ],
-    "comments": [
+          "$oid": "61ee70161857d751a452e8fc"
+        },
         {
-            "_id": {
-                "$oid": "61ee70161857d751a452e8ed"
-            },
-            "blogs": [{
-                "$oid": "61ee70161857d751a452e8f4"
-            }, {
-                "$oid": "61ee70161857d751a452e8fc"
-            }, {
-                "$oid": "61ee70161857d751a452e902"
-            }, {
-                "$oid": "61ee70161857d751a452e908"
-            }],
-            "username": "Francis",
-            "name": "Frank",
-            "passwordHash": "$2b$10$4AmICl42sDZA6w3L3cMF0ufDNrMTsl/v0y7yymJ9gRzhSldG/BCse",
-            "__v": 4
+          "$oid": "61ee70161857d751a452e902"
+        },
+        {
+          "$oid": "61ee70161857d751a452e908"
         }
-    ]
-  }
+      ],
+      "username": "Francis",
+      "name": "Frank",
+      "passwordHash": "$2b$10$4AmICl42sDZA6w3L3cMF0ufDNrMTsl/v0y7yymJ9gRzhSldG/BCse",
+      "__v": 4
+    }
+  ]
+}

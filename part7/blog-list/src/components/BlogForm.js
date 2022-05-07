@@ -1,43 +1,59 @@
-import React, { useState } from 'react'
-import blogService from '../services/blogs'
+import React, { useState } from "react";
+import blogService from "../services/blogs";
 
+const BlogForm = ({
+  setBlogs,
+  setNotification,
+  toggleVisibility,
+  createBlog,
+}) => {
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
 
-const BlogForm = ({ setBlogs, setNotification, toggleVisibility, createBlog }) => {
-    const [title, setTitle] = useState('')
-    const [url, setUrl] = useState('')
+  const newBlog = async (event) => {
+    event.preventDefault();
 
-    const newBlog = async (event) => {
-        event.preventDefault()
+    const newBlog = await createBlog({ title, url });
+    toggleVisibility();
+    setNotification(
+      `New Blog Created: Title ${newBlog.title}, Author: ${newBlog.author}`
+    );
+    setUrl("");
+    setTitle("");
+    const blogs = await blogService.getAll();
+    setBlogs(blogs);
+  };
 
-        const newBlog = await createBlog({ title, url })
-        toggleVisibility()
-        setNotification(`New Blog Created: Title ${newBlog.title}, Author: ${newBlog.author}`)
-        setUrl('')
-        setTitle('')
-        const blogs = await blogService.getAll()
-        setBlogs( blogs )
-
-    }
-
-    return (
+  return (
+    <div>
+      <h3>Create New Blog Post</h3>
+      <form onSubmit={newBlog}>
         <div>
-            <h3>Create New Blog Post</h3>
-            <form onSubmit={ newBlog }>
-                <div>
-                    <label>title: </label>
-                    <input id='title' type='text' value={title} name='title'
-                        onChange = { ({ target }) => setTitle(target.value) } />
-                </div>
-                <div>
-                    <label>url: </label>
-                    <input id='url' type="text" value={url} name='url'
-                        onChange = { ({ target }) => setUrl(target.value)} />
-                </div>
-                <button id='submit-blog' type='submit'>Submit</button>
-            </form>
+          <label>title: </label>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            name="title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
         </div>
-    )
-}
+        <div>
+          <label>url: </label>
+          <input
+            id="url"
+            type="text"
+            value={url}
+            name="url"
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button id="submit-blog" type="submit">
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+};
 
-
-export default BlogForm
+export default BlogForm;
