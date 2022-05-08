@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import blogService from "../services/blogs";
 import { useSelector, useDispatch } from "react-redux";
 import { likeBlog, deleteBlog } from '../redux/blogsSlice'
+import { Link } from 'react-router-dom'
 
 const Blog = ({ blog, resetBlog, user }) => {
     const [visible, setVisible] = useState(false);
@@ -34,7 +35,7 @@ const Blog = ({ blog, resetBlog, user }) => {
   return (
     <div className="blog" style={blogStyle}>
       <div>
-        {blog.title} {blog.author}
+        <Link to={`/blog/${blog.id}`}> {blog.title} </Link> {blog.author}
         <button
           style={{ marginLeft: "10px" }}
           onClick={() => setVisible(!visible)}
