@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
+import { useSelector, useDispatch } from "react-redux";
+import { likeBlog, deleteBlog } from '../redux/blogsSlice'
 
 const Blog = ({ blog, resetBlog, user }) => {
-  const [visible, setVisible] = useState(false);
-  const [update, setUpdate] = useState(1);
-  const username = user === null ? "" : user.username;
+    const [visible, setVisible] = useState(false);
+    const [update, setUpdate] = useState(1);
+    const username = user === null ? "" : user.username;
 
-  const addLike = async () => {
-    let newBlog = blog;
-    newBlog.likes++;
-    await blogService.updateBlog(newBlog);
-    setUpdate(update + 1);
+    const dispatch = useDispatch()
+        
+    const addLike = async () => {
+        dispatch(likeBlog(blog.id))
   };
 
-  const deleteBlog = async (id) => {
+  const removeBlog = async (id) => {
     if (window.confirm(`Delete ${blog.title}?`)) {
-      await blogService.deleteBlog(id);
-      const blogs = await blogService.getAll();
-      resetBlog(blogs);
+    //   await blogService.deleteBlog(id);
+    //   const blogs = await blogService.getAll();
+    //   resetBlog(blogs);
+        dispatch(deleteBlog(blog.id))
     }
   };
 
@@ -55,7 +57,7 @@ const Blog = ({ blog, resetBlog, user }) => {
           {blog.user.username === username ? (
             <button
               style={{ marginLeft: "10px" }}
-              onClick={() => deleteBlog(blog.id)}
+              onClick={() => removeBlog(blog.id)}
             >
               remove
             </button>

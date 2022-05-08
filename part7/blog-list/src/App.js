@@ -6,22 +6,29 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setAll } from './redux/blogsSlice'
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState(null);
-  const [loginVisible, setLoginVisible] = useState(false);
- 
+    //const [blogs, setBlogs] = useState([]);
+    const blogs = useSelector((state) => state.blogs.blogs)
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [user, setUser] = useState(null);
+    const [notification, setNotification] = useState(null);
+    const [loginVisible, setLoginVisible] = useState(false);
 
-  const blogFormRef = useRef();
+    const dispatch = useDispatch()
+    const blogFormRef = useRef();
+
+    const setBlogs = () => {}
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then( (blogs) => {
+        dispatch(setAll(blogs))
+    })
+    //setBlogs(blogs);
   }, []);
 
   useEffect(() => {
@@ -101,7 +108,6 @@ const App = () => {
       {user !== null && (
         <Togglable buttonLabel="New Blog" ref={blogFormRef}>
           <BlogForm
-            setBlogs={setBlogs}
             setNotification={setNotification}
             toggleVisibility={() => blogFormRef.current.toggleVisibility()}
             createBlog={blogService.createBlog}
