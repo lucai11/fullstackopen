@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
+
 const BlogForm = ({
   setBlogs,
   setNotification,
   toggleVisibility,
   createBlog,
-}) => {
+  }) => {
+
+
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
 
