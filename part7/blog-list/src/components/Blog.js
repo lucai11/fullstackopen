@@ -3,6 +3,7 @@ import blogService from "../services/blogs";
 import { useSelector, useDispatch } from "react-redux";
 import { likeBlog, deleteBlog } from '../redux/blogsSlice'
 import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
 
 const Blog = ({ blog, resetBlog, user }) => {
     const [visible, setVisible] = useState(false);
@@ -36,12 +37,12 @@ const Blog = ({ blog, resetBlog, user }) => {
     <div className="blog" style={blogStyle}>
       <div>
         <Link to={`/blog/${blog.id}`}> {blog.title} </Link> {blog.author}
-        <button
-          style={{ marginLeft: "10px" }}
+        <Button
+          style={{ marginLeft: "10px", marginBottom: "10px" }}
           onClick={() => setVisible(!visible)}
         >
           view
-        </button>
+        </Button>
         <div
           className="fullBlog"
           style={visible ? { display: "block" } : { display: "none" }}
@@ -50,18 +51,18 @@ const Blog = ({ blog, resetBlog, user }) => {
           <br />
           <div className="likes">
             <span data-cy="num-likes">{blog.likes}</span>
-            <button style={{ marginLeft: "10px" }} onClick={() => addLike()}>
+            <Button style={{ marginLeft: "10px" }} onClick={() => addLike()}>
               like
-            </button>
+            </Button>
           </div>
           <br />
           {blog.user.username === username ? (
-            <button
+            <Button
               style={{ marginLeft: "10px" }}
               onClick={() => removeBlog(blog.id)}
             >
               remove
-            </button>
+            </Button>
           ) : (
             ""
           )}

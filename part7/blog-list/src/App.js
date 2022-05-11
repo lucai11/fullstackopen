@@ -8,6 +8,7 @@ import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import BlogView from "./components/BlogView"
 import Profile from './components/Profile'
+import Nav from './components/Navbar'
 import {
     BrowserRouter as Router,
     Routes, Route, Link
@@ -16,6 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setAll } from './redux/blogsSlice'
 import { currentUser, logoutUser, setAllUsers } from './redux/usersSlice'
 
+import Container from 'react-bootstrap/Container'
 
 const App = () => {
     //const [blogs, setBlogs] = useState([]);
@@ -82,7 +84,8 @@ const App = () => {
   const showWhenVisible = { display: loginVisible ? "" : "none" };
 
   return (
-    
+    <Container>
+        <Nav />
         <div>
             <h2>blogs</h2>
             
@@ -118,6 +121,7 @@ const App = () => {
                 <Route path='/blog/:id' element = {<BlogView />} />        
             </Routes>
         </div>  
+    </Container>
   );
 };
 
