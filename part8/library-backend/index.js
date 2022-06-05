@@ -3,6 +3,7 @@ const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const Author = require('./models/author')
 const Book = require('./models/book')
+const author = require('./models/author')
 
 require("dotenv").config()
 let PORT = process.env.PORT
@@ -142,8 +143,8 @@ const typeDefs = gql`
 
 const resolvers = {
     Query: {
-        authorCount: () => authors.length,
-        bookCount: () => books.length,
+        authorCount: () => Author.collection.countDocuments(),
+        bookCount: () => Book.collection.countDocuments(),
         allBooks: async (root, args) => {
           let booksToReturn = await Book.find({}).populate('author')
             if(!args.author && !args.genre){
@@ -198,14 +199,14 @@ const resolvers = {
           const book = new Book({ ...args, author: newAuthor })
           return book.save()
         },
-        editAuthor: (root, args) => {
-          const author = authors.find(author => author.name === args.name)
+        editAuthor: async (root, args) => {
+          const author = await Author.findOne({ name: args.name })
+
           if(!author){
             return null
           }
-          const updatedAuthor = { ...author, born: args.born}
-          authors = authors.map(author => author.name === args.name ? updatedAuthor : author)
-          return updatedAuthor
+          author.born = args.born
+          return author.save()
         }
     }
 }
