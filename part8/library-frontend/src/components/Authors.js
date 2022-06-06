@@ -15,9 +15,7 @@ const Authors = (props) => {
     }
   })
 
-  if (!props.show) {
-    return null
-  }
+
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const data = useQuery(ALL_AUTHORS)
@@ -41,6 +39,9 @@ const Authors = (props) => {
     label: a.name
   }))
  
+  if (!props.show) {
+    return null
+  }
 
   return (
     <div>

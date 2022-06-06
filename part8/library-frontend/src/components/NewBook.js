@@ -16,10 +16,7 @@ const NewBook = (props) => {
     }
   })
 
-  if (!props.show) {
-    return null
-  }
-
+ 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   
 
@@ -39,6 +36,11 @@ const NewBook = (props) => {
     setGenres(genres.concat(genre))
     setGenre('')
   }
+  
+  if (!props.show) {
+    return null
+  }
+
 
   return (
     <div>
